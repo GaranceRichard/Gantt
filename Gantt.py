@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[8]:
+# In[23]:
 
 
 import datetime as dt
@@ -10,27 +10,33 @@ import matplotlib.font_manager as font_manager
 import matplotlib.dates
 from matplotlib.dates import WEEKLY,MONTHLY, DateFormatter, rrulewrapper, RRuleLocator 
 import numpy as np
-  
- 
+
+
+# Create the date
+
+# In[24]:
+
+
 def _create_date(datetxt):
-    """Creates the date"""
     day,month,year=datetxt.split('-')
     date = dt.datetime(int(year), int(month), int(day))
     mdate = matplotlib.dates.date2num(date) 
     return mdate
- 
+
+
+# Create gantt charts with matplotlib, Give file name.
+
+# In[88]:
+
+
 def CreateGanttChart(fname):
-    """
-        Create gantt charts with matplotlib
-        Give file name.
-    """ 
     ylabels = []
     customDates = []
     try:
         textlist=open(fname).readlines()
     except:
         return
-#
+
     for tx in textlist:
         if not tx.startswith('#'):
             ylabel,startdate,enddate=tx.split(',')
@@ -49,7 +55,6 @@ def CreateGanttChart(fname):
          ax.barh((i*0.5)+0.5, end_date - start_date, left=start_date, height=0.3, align='center', edgecolor='lightgreen', color='orange', alpha = 0.8)
     locsy, labelsy = plt.yticks(pos,ylabels)
     plt.setp(labelsy, fontsize = 14)
-#    ax.axis('tight')
     ax.set_ylim(ymin = -0.1, ymax = ilen*0.5+0.5)
     ax.grid(color = 'g', linestyle = ':')
     ax.xaxis_date()
@@ -64,28 +69,18 @@ def CreateGanttChart(fname):
     plt.setp(labelsx, rotation=30, fontsize=10)
  
     font = font_manager.FontProperties(size='small')
-    ax.legend(loc=1,prop=font)
  
     ax.invert_yaxis()
     fig.autofmt_xdate()
     plt.savefig('gantt.svg')
+    plt.savefig('gantt.png')
     plt.show()
- 
-if __name__ == '__main__':
-    fname=r"projectChart.txt"
-    CreateGanttChart(fname)
 
 
-# In[9]:
+# In[89]:
 
 
-
-
-
-# In[11]:
-
-
-CreateGanttChart('test.txt')
+CreateGanttChart('gantt.txt')
 
 
 # In[ ]:
